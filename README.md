@@ -234,13 +234,13 @@ $ printf 'haveno-Haveno.desktop' | qvm-appmenus --set-whitelist – haveno
 #### *TemplateVM Building From Source via `git` Repository (Scripted)*
 ##### In `dispXXXX` AppVM:
 ```shell
-% sudo bash haveno/scripts/install_qubes/scripts/1-TemplateVM/1.0-haveno-templatevm.sh "<JDK_PACKAGE_URL>" "<JDK_SHA_HASH>" "<SOURCE_URL>"
+% bash haveno/scripts/install_qubes/scripts/1-TemplateVM/1.0-haveno-templatevm.sh "<JDK_PACKAGE_URL>" "<JDK_SHA_HASH>" "<SOURCE_URL>"
 ```
 
 <p style="text-align: center;">Example:</p>
 
 ```shell
-% sudo bash haveno/scripts/install_qubes/scripts/1-TemplateVM/1.0-haveno-templatevm.sh "https://download.bell-sw.com/java/21.0.6+10/bellsoft-jdk21.0.6+10-linux-amd64.deb" "a5e3fd9f5323de5fc188180c91e0caa777863b5b" "https://github.com/haveno-dex/haveno"
+% bash haveno/scripts/install_qubes/scripts/1-TemplateVM/1.0-haveno-templatevm.sh "https://download.bell-sw.com/java/21.0.6+10/bellsoft-jdk21.0.6+10-linux-amd64.deb" "a5e3fd9f5323de5fc188180c91e0caa777863b5b" "https://github.com/haveno-dex/haveno"
 ```
 + Upon Successful Compilation & Packaging, A `Filecopy` Confirmation Will Be Presented
 
