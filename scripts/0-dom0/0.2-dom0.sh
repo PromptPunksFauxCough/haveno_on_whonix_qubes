@@ -1,5 +1,5 @@
 #!/bin/bash
-## ./haveno-on-qubes/scripts/0.2-dom0.sh
+## ./haveno_on_whonix_qubes/scripts/0.2-dom0.sh
 
 ## Create Haveno AppVM:
 qvm-create --template haveno-template --class AppVM --label=orange --property memory=2048 --property maxmem=4096 --property netvm=sys-haveno haveno
