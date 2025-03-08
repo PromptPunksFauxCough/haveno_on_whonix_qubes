@@ -1,16 +1,16 @@
-# **Using External `tor` with `Haveno`**
-## *[How to install little-t-`tor`?](https://support.torproject.org/little-t-tor/#little-t-tor_install-little-t-tor)*
+# **Using External `tor` with Haveno**
+## [How to Install little-t-`tor` for Your Platform](https://support.torproject.org/little-t-tor/#little-t-tor_install-little-t-tor)
 
-The following `tor` installation instructions have are presented here for convenience.
+The following `tor` installation instructions are presented here for convenience.
 
-*  **For the most complete, up-to-date & authoritative steps, readers are encouraged to refer the [Tor Project's Official Homepage](https://www.torproject.org) linked in the header**
+*  **For the most complete, up-to-date & authoritative steps, readers are encouraged to refer to the [Tor Project's Official Homepage](https://www.torproject.org) linked in the header**
 
 * **Notes:**
 
-  For optimum compatibility with `Haveno` the running `tor` version should match that of the internal `Haveno` `tor` version
+  For optimum compatibility with Haveno the running `tor` version should match that of the internal Haveno `tor` version
 
   For best results, use a version of `tor` which supports the [Onion Service Proof of Work](https://onionservices.torproject.org/technology/security/pow)  (`PoW`) mechanism
-  * (IE: `GNU` build ot `tor`)
+  * (IE: `GNU` build of `tor`)
 
 ---
 
@@ -52,9 +52,9 @@ The following `tor` installation instructions have are presented here for conven
 ### Debian / Ubuntu
 * *Do **not** use the packages in Ubuntu's universe. In the past they have not reliably been updated. That means you could be missing stability and security fixes.*
 
-* Configure the [Official `Tor` Package Repository](https://deb.torproject.org/torproject.org)
+* Configure the [Official Tor Package Repository](https://deb.torproject.org/torproject.org)
 
-  Enable the [Official `Tor` Package Repository](https://deb.torproject.org/torproject.org) following these [instructions](https://support.torproject.org/apt/tor-deb-repo/)
+  Enable the [Official Tor Package Repository](https://deb.torproject.org/torproject.org) following these [instructions](https://support.torproject.org/apt/tor-deb-repo/)
 
 #### Package Installation
 ```shell
@@ -62,9 +62,9 @@ The following `tor` installation instructions have are presented here for conven
 ```
 
 ### Fedora
-  * Configure the [Official `Tor` Package Repository](https://rpm.torproject.org/fedora)
+  * Configure the [Official Tor Package Repository](https://rpm.torproject.org/fedora)
 
-    Enable the [Official `Tor` Package Repository](https://rpm.torproject.org/fedora) by following these [instructions](https://support.torproject.org/rpm/tor-rpm-install)
+    Enable the [Official Tor Package Repository](https://rpm.torproject.org/fedora) by following these [instructions](https://support.torproject.org/rpm/tor-rpm-install)
 
 #### Package Installation
 ```
@@ -94,7 +94,7 @@ $ tar -xzf tor-<version>.tar.gz; cd tor-<version>
 
 * Replace \<version\> with the latest version of `tor`
 
-  > For example, `tor-0.4.8.12`
+  > For example, `tor-0.4.8.14`
 
 ```shell
 $ ./configure && make
@@ -116,7 +116,7 @@ $ tor
 
 ### Windows
 #### Download
-* Download the `Windows Expert Bundle` from the [Official `Tor` Project's Download page](https://www.torproject.org/download/tor)
+* Download the `Windows Expert Bundle` from the [Official Tor Project's Download page](https://www.torproject.org/download/tor)
 
 #### Extract
 * Extract Archive to Disk
@@ -148,20 +148,66 @@ PS C:\Tor\> sc create tor start=auto binPath="<PATH TO>\Tor\tor.exe -nt-service"
 PS C:\Tor\> sc start tor
 ```
 
+## Configuring `tor` via `torrc`
+#### [I'm supposed to "edit my torrc". What does that mean?](https://support.torproject.org/tbb/tbb-editing-torrc/)
+* Per the [Official Tor Project's support page](https://support.torproject.org/tbb/tbb-editing-torrc/):
+  * **WARNING:** Do **NOT** follow random advice instructing you to edit your torrc! Doing so can allow an attacker to compromise your security and anonymity through malicious configuration of your torrc.
+
+    **Note:**
+
+    The `torrc` location will ***not*** match those stated in the documentation linked above and will vary across each platform.
+
+#### [Sample `torrc`](https://gitlab.torproject.org/tpo/core/tor/-/blob/HEAD/src/config/torrc.sample.in)
+Users are ***strongly*** encouraged to review both the [Official Tor Project's support page](https://support.torproject.org/tbb/tbb-editing-torrc/) as well as the [sample `torrc`](https://gitlab.torproject.org/tpo/core/tor/-/blob/HEAD/src/config/torrc.sample.in) before proceeding.
+
+#### Enable `torControlPort` in `torrc`
+In order for Haveno to use the `--torControlPort` option, it must be enabled and accessible. The most common way to do so is to edit the `torrc` fiel with a text editor to ensure that an entry for `ControlPort` followed by port number to listen on is present in the `torrc` file.
+
+#### [Authentication](https://spec.torproject.org/control-spec/implementation-notes.html#authentication)
+Per the [Tor Control Protocol - Implementation Notes](https://spec.torproject.org/control-spec/implementation-notes.html):
+
+  * ***"If the control port is open and no authentication operation is enabled, `tor` trusts any local user that connects to the control port. This is generally a poor idea."***
+
+##### `CookieAuthentication`
+If the `CookieAuthentication` option is true, `tor` writes a *"magic cookie"* file named `control_auth_cookie` into its data directory (or to another file specified in the `CookieAuthFile` option).
+
+##### Example:
+```shell
+ControlPort 9051
+CookieAuthentication 1
+```
+
+##### `HashedControlPassword`
+If the `HashedControlPassword` option is set, it must contain the salted hash of a secret password. The salted hash is computed according to the S2K algorithm in `RFC 2440` of `OpenPGP`, and prefixed with the s2k specifier. This is then encoded in hexadecimal, prefixed by the indicator sequence "16:".
+
+* `HashedControlPassword` can be generated like so:
+  ```shell
+  $ tor --hash-password <password>
+  ```
+
+###### Example:
+```shell
+ControlPort 9051
+HashedControlPassword 16:C01147DC5F4DA2346056668DD23522558D0E0C8B5CC88FE72EEBC51967
+```
+
+##### Restart `tor`
+`tor` must be restarted for changes to `torrc` to be applied.
+
 ### \* ***Optional*** \*
 #### [Set Up Your Onion Service](https://community.torproject.org/onion-services/setup)
 
-While not a *strict* requirement for use with `Haveno`, some users may wish to configure an [Onion Service](https://community.torproject.org/onion-services)
+While not a *strict* requirement for use with Haveno, some users may wish to configure an [Onion Service](https://community.torproject.org/onion-services)
 
-  * ***Only Required When Using The `--hiddenServiceAddress` Option***
+  * ***Only Required When Using The Haveno `--hiddenServiceAddress` Option***
 
-Please see the [Official `Tor` Project's Documentation](https://community.torproject.org/onion-services/setup) for more information about configuration and usage of these services
+Please see the [Official Tor Project's Documentation](https://community.torproject.org/onion-services/setup) for more information about configuration and usage of these services
 
 ---
 
-## *`Haveno`'s Natively Aware `tor` Options*
+## Haveno's `tor` Aware Options
 
-`Haveno` is a natively `tor` aware application and offers **many** flexible configuration options for use by privacy conscious users.
+Haveno is a natively `tor` aware application and offers **many** flexible configuration options for use by privacy conscious users.
 
 While some are mutually exclusive, many are cross-applicable.
 
@@ -211,7 +257,7 @@ Users are encouraged to experiment with options before use to determine which op
 
   **Note:**
 
-  `torrc`-entries which are critical to `Haveno`'s flawless operation (`torrc` options line, `torrc` option, ...) **can not** be overwritten
+  `torrc`-entries which are critical to Haveno's flawless operation (`torrc` options line, `torrc` option, ...) **can not** be overwritten
 
 * Expected Input Format:
 
@@ -228,11 +274,11 @@ Users are encouraged to experiment with options before use to determine which op
 #### `--torrcOptions`
 * Function:
 
-  A list of `torrc`-entries to amend to `Haveno`'s `torrc`
+  A list of `torrc`-entries to amend to Haveno's `torrc`
 
     **Note:**
 
-    *`torrc`-entries which are critical to `Haveno`'s flawless operation (`torrc` options line, `torrc` option, ...) can **not** be overwritten*
+    *`torrc`-entries which are critical to Haveno's flawless operation (`torrc` options line, `torrc` option, ...) can **not** be overwritten*
 
 * Expected Input Format:
 
@@ -249,7 +295,7 @@ Users are encouraged to experiment with options before use to determine which op
 #### `--torControlHost`
 + Function
 
-  The control `hostname` or `IP` of an already running `tor` service to be used by `Haveno`
+  The control `hostname` or `IP` of an already running `tor` service to be used by Haveno
 
 * Expected Input Format
 
@@ -268,7 +314,7 @@ Users are encouraged to experiment with options before use to determine which op
 #### `--torControlPort`
 + Function
 
-  The control port of an already running `tor` service to be used by `Haveno`
+  The control port of an already running `tor` service to be used by Haveno
 
 * Expected Input Format
 
@@ -402,7 +448,7 @@ Users are encouraged to experiment with options before use to determine which op
 
 ---
 
-## *Examples*
+## Starting Haveno Using Externally Available `tor`
 ### Dynamic Onion Assignment via `--torControlPort`
 ```shell
 $ /opt/haveno/bin/Haveno --torControlPort='9051' --torControlCookieFile='/var/run/tor/control.authcookie' --torControlUseSafeCookieAuth --useTorForXmr='on' --socks5ProxyXmrAddress='127.0.0.1:9050'
