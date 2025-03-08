@@ -1,5 +1,5 @@
 #!/bin/zsh
-## ./haveno-on-qubes/scripts/2.0-haveno-netvm_taker.sh
+## ./haveno_on_whonix_qubes/scripts/2.0-haveno-netvm_taker.sh
 
 ## Function to print messages in blue:
 echo_blue() {
