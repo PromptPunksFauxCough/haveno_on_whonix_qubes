@@ -1,5 +1,5 @@
 #!/bin/bash
-## ./haveno-on-qubes/scripts/1.1-haveno-templatevm.sh
+## ./haveno_on_whonix_qubes/scripts/1.1-haveno-templatevm.sh
 
 
 function remote {
