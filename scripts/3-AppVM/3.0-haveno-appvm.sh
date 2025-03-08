@@ -1,5 +1,5 @@
 #!/bin/zsh
-## ./haveno-on-qubes/scripts/3.0-haveno-appvm_taker.sh 
+## ./haveno_on_whonix_qubes/scripts/3.0-haveno-appvm_taker.sh 
 
 ## Function to print messages in blue:
 echo_blue() {
